@@ -82,31 +82,6 @@ SECTIONS
     __exidx_end = .;
   } >FLASH
 
-/* XXX: This stuff is for ELF. Pretty sure we don't need it, and we'll delete it
- * when compilation succeeds without it */
-/*
-  .preinit_array:
-  {
-    PROVIDE_HIDDEN (__preinit_array_start = .);
-    KEEP (*(.preinit_array*))
-    PROVIDE_HIDDEN (__preinit_array_end = .);
-  } >FLASH
-  .init_array :
-  {
-    PROVIDE_HIDDEN (__init_array_start = .);
-    KEEP (*(SORT(.init_array.*)))
-    KEEP (*(.init_array*))
-    PROVIDE_HIDDEN (__init_array_end = .);
-  } >FLASH
-  .fini_array :
-  {
-    PROVIDE_HIDDEN (__fini_array_start = .);
-    KEEP (*(SORT(.fini_array.*)))
-    KEEP (*(.fini_array*))
-    PROVIDE_HIDDEN (__fini_array_end = .);
-  } >FLASH
-*/
-
   /* This points to the data section for the startup script */
   _sidata = LOADADDR(.data);
 
