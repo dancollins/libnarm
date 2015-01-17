@@ -17,7 +17,8 @@ PROJECT = blinky
 
 # Add project sources
 SRCS_C = \
-	blinky.c
+	blinky.c \
+	system_stm32f0xx.c
 
 SRCS_H =
 
@@ -39,7 +40,6 @@ STM_SRCS_C = \
 	STM32F0xx_StdPeriph_Lib_V1.3.1/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_gpio.c \
 	STM32F0xx_StdPeriph_Lib_V1.3.1/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_misc.c \
 	STM32F0xx_StdPeriph_Lib_V1.3.1/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_rcc.c \
-	STM32F0xx_StdPeriph_Lib_V1.3.1/Libraries/CMSIS/Device/ST/STM32F0xx/Source/Templates/system_stm32f0xx.c
 
 STM_INCLUDE = \
 	STM32F0xx_StdPeriph_Lib_V1.3.1/Libraries/STM32F0xx_StdPeriph_Driver/inc \
