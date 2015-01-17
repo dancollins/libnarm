@@ -15,14 +15,12 @@
 
 #include <stm32f0xx.h>
 
-volatile uint32_t TimingDelay = 0;
-void delay(uint32_t ticks);
+#include "libnarm.h"
 
 int main(void) {
   GPIO_InitTypeDef gpio_cfg;
 
-  /* SysTick interrupt every 1ms */
-  SysTick_Config(SystemCoreClock / 1000);
+  nm_systick_init();
 
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
 
@@ -36,21 +34,9 @@ int main(void) {
   while(1) {
 	GPIO_WriteBit(GPIOA, GPIO_Pin_14, Bit_SET);
 	GPIO_WriteBit(GPIOA, GPIO_Pin_15, Bit_RESET);
-	delay(250);
+	nm_systick_delay(250);
 	GPIO_WriteBit(GPIOA, GPIO_Pin_14, Bit_RESET);
 	GPIO_WriteBit(GPIOA, GPIO_Pin_15, Bit_SET);
-	delay(250);
+	nm_systick_delay(250);
   }
-}
-
-/* Create a delay for the given systicks */
-void delay(uint32_t ticks) {
-	TimingDelay = ticks;
-	while (TimingDelay != 0);
-}
-
-/* Override the systick handler */
-void SysTick_Handler(void) {
-	if (TimingDelay != 0)
-		TimingDelay--;
 }

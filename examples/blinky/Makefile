@@ -55,22 +55,22 @@ STM_DEFS = \
 #
 ARCH_FLAGS=-mthumb -mcpu=cortex-m0 -mfloat-abi=soft
 
-STARTUP_DEFS=-D__STARTUP_CLEAR_BSS -D__START=main
-
 GC=-Wl,--gc-sections
 MAP=-Wl,-Map=$(PROJECT).map
 
-CFLAGS=$(ARCH_FLAGS) $(STARTUP_DEFS) $(STM_DEFS)
+CFLAGS=$(ARCH_FLAGS) $(STM_DEFS)
 CFLAGS+=-Wall -Werror -g -std=gnu99
 CFLAGS+=-O0 -flto -ffunction-sections -fdata-sections
 CFLAGS+=-fno-builtin
 
 CFLAGS += $(addprefix -I, $(INCLUDE))
+CFLAGS += $(addprefix -I, ../../lib)
 CFLAGS += $(addprefix -I$(STM_DIR)/, $(STM_INCLUDE))
 
 LDSCRIPTS=-Lsrc -T stm32f051k8_flash.ld
 LFLAGS=--specs=nano.specs -lc -lnosys $(LDSCRIPTS) $(GC) $(MAP)
 
+LFLAGS += -lnarm -L../../lib
 
 OBJS = \
 	$(addprefix build/, $(SRCS_C:.c=.o)) \
