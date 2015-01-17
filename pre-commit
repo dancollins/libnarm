@@ -13,17 +13,38 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
+exceptions='NOTICES AUTHORS'
+
 fail=0
 for f in `git diff --cached --name-only --diff-filter=ACM`
 do
+	# Check all edited files display the copyright notice
     output=`cat $f | grep 'Dan Collins & Tim Dawson'`
     if [ $? == '1' ]
     then
-	echo "'" $f "'" "does not have the copyright licence notice!"
-        fail=1
+		exempt=0
+		# If the copyright notice isn't displayed, then we should check if the
+		# file is excepted from having the notice
+		for exception in $exceptions
+		do
+			if [ $f == $exception ]
+			then
+				echo "'" $f "'" "is exempt from the copyright licence notice"
+				exempt=1
+				break
+			fi
+		done
+
+		# If the file is not exempt, then the commit should fail
+		if [ $exempt == 0 ]
+		then
+			echo "'" $f "'" "does not have the copyright licence notice!"
+			fail=1
+		fi
     fi
 done
 
+# If anything failed, stop the commit
 if [ $fail != 0 ]
 then
     exit 1;
