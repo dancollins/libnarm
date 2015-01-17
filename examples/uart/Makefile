@@ -28,7 +28,6 @@ SRCS_S = \
 # Add project include directories here
 INCLUDE = src
 
-
 #
 # VENDOR
 #
@@ -65,12 +64,14 @@ CFLAGS+=-Os -flto -ffunction-sections -fdata-sections
 CFLAGS+=-fno-builtin
 
 CFLAGS += $(addprefix -I, $(INCLUDE))
+CFLAGS += $(addprefix -I, ../../lib)
 CFLAGS += $(addprefix -I$(STM_DIR)/, $(STM_INCLUDE))
 
 LDSCRIPTS = -Lsrc -T stm32f051k8_flash.ld
 LFLAGS = $(LDSCRIPTS) $(GC) $(MAP)
 LFLAGS = --specs=nano.specs -lc -lnosys $(LDSCRIPTS) $(GC) $(MAP)
 
+LFLAGS += -lnarm -L../../lib
 
 OBJS = \
 	$(addprefix build/, $(SRCS_C:.c=.o)) \
