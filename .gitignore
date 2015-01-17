@@ -4,6 +4,10 @@
 *.obj
 *.elf
 
+# Other outputs we don't want
+*.map
+*.lst
+
 # Libraries
 *.lib
 *.a
@@ -17,6 +21,7 @@
 
 # Executables
 *.hex
+*.bin
 
 # Emacs
 *~
