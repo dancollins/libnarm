@@ -18,16 +18,13 @@
 
 #include "libnarm.h"
 
-volatile uint32_t TimingDelay = 0;
-void delay(uint32_t ticks);
-
 int main(void) {
   GPIO_InitTypeDef gpio_cfg;
 
   nm_systick_init();
   nm_debug_init();
 
-  gpio_cfg.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
+  gpio_cfg.GPIO_Pin = GPIO_Pin_14 | GPIO_Pin_15;
   gpio_cfg.GPIO_Speed = GPIO_Speed_50MHz;
   gpio_cfg.GPIO_Mode = GPIO_Mode_OUT;
   gpio_cfg.GPIO_OType = GPIO_OType_PP;
@@ -36,6 +33,7 @@ int main(void) {
 
   while(1) {
 	printf("Hello, world!\n");
+	fprintf(stderr, "INTERRUPT\n");
 
 	GPIO_WriteBit(GPIOA, GPIO_Pin_14, Bit_SET);
 	nm_systick_delay(250);
