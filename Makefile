@@ -18,12 +18,14 @@ all:
 	$(MAKE) -C lib
 	$(MAKE) -C vendor/STM32F0xx_StdPeriph_Lib_V1.3.1/Libraries
 	$(MAKE) -C examples/blinky
+	$(MAKE) -C examples/malloc
 	$(MAKE) -C examples/uart
 
 clean:
 	$(MAKE) -C lib clean
 	$(MAKE) -C vendor/STM32F0xx_StdPeriph_Lib_V1.3.1/Libraries clean
 	$(MAKE) -C examples/blinky clean
+	$(MAKE) -C examples/malloc clean
 	$(MAKE) -C examples/uart clean
 
 #
