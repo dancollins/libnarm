@@ -74,8 +74,6 @@ uint8_t nm_debug_write(char *ptr, uint8_t len) {
   /* Start the transmission if it's not already */
   if (!debug_on) {
 	USART_ITConfig(USART2, USART_IT_TXE, ENABLE);
-	USART_SendData(USART2, debug_buf[debug_tail++]);
-
 	debug_on = 1;
   }
 
