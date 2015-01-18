@@ -67,10 +67,8 @@ CFLAGS += $(addprefix -I, $(INCLUDE))
 CFLAGS += $(addprefix -I, ../../lib)
 CFLAGS += $(addprefix -I$(STM_DIR)/, $(STM_INCLUDE))
 
-LDSCRIPTS=-Lsrc -T stm32f051k8_flash.ld
-LFLAGS=--specs=nano.specs -lc -lnosys $(LDSCRIPTS) $(GC) $(MAP)
-
-LFLAGS += -lnarm -L../../lib
+LDSCRIPTS=-Lsrc -L../../lib -T stm32f051k8_flash.ld
+LFLAGS=--specs=nano.specs -lc -lnarm -lnosys $(LDSCRIPTS) $(GC) $(MAP)
 
 OBJS = \
 	$(addprefix build/, $(SRCS_C:.c=.o)) \
