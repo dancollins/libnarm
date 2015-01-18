@@ -35,12 +35,6 @@ INCLUDE = src
 STM_DIR = \
 	../../vendor
 
-STM_SRCS_C = \
-	STM32F0xx_StdPeriph_Lib_V1.3.1/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_gpio.c \
-	STM32F0xx_StdPeriph_Lib_V1.3.1/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_misc.c \
-	STM32F0xx_StdPeriph_Lib_V1.3.1/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_rcc.c \
-	STM32F0xx_StdPeriph_Lib_V1.3.1/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_usart.c
-
 STM_INCLUDE = \
 	STM32F0xx_StdPeriph_Lib_V1.3.1/Libraries/STM32F0xx_StdPeriph_Driver/inc \
 	STM32F0xx_StdPeriph_Lib_V1.3.1/Libraries/CMSIS/Include \
@@ -58,24 +52,24 @@ ARCH_FLAGS=-mthumb -mcpu=cortex-m0 -mfloat-abi=soft
 GC=-Wl,--gc-sections
 MAP=-Wl,-Map=$(PROJECT).map
 
-CFLAGS=$(ARCH_FLAGS) $(STM_DEFS)
-CFLAGS+=-Wall -Werror -g -std=gnu99
-CFLAGS+=-Os -flto -ffunction-sections -fdata-sections
-CFLAGS+=-fno-builtin
+CFLAGS += $(ARCH_FLAGS) $(STM_DEFS)
+CFLAGS += -Wall -Werror -g -std=gnu99
+CFLAGS += -Os -flto -ffunction-sections -fdata-sections
+CFLAGS += -fno-builtin
 
 CFLAGS += $(addprefix -I, $(INCLUDE))
 CFLAGS += $(addprefix -I, ../../lib)
 CFLAGS += $(addprefix -I$(STM_DIR)/, $(STM_INCLUDE))
 
-LDSCRIPTS = -Lsrc -L../../lib -T stm32f051k8_flash.ld
-LFLAGS = $(LDSCRIPTS) $(GC) $(MAP)
-LFLAGS = --specs=nano.specs -lc -lnarm -lnosys $(LDSCRIPTS) $(GC) $(MAP)
+LFLAGS += -Lsrc -L../../lib
+LFLAGS += -L../../vendor/STM32F0xx_StdPeriph_Lib_V1.3.1/Libraries
+LFLAGS += -Tstm32f051k8_flash.ld
+LFLAGS += --specs=nano.specs -lc -lnarm -lstm32f0xx -lnosys
+LFLAGS += $(GC) $(MAP)
 
 OBJS = \
 	$(addprefix build/, $(SRCS_C:.c=.o)) \
-	$(addprefix build/, $(SRCS_S:.S=.o)) \
-	$(addprefix build/vendor/, $(STM_SRCS_C:.c=.o)) \
-	$(addprefix build/vendor/, $(STM_SRCS_S:.S=.o))
+	$(addprefix build/, $(SRCS_S:.S=.o))
 
 
 #
@@ -90,14 +84,6 @@ build/%.o: src/%.c
 	$(CC) $< $(CFLAGS) -c -o $@
 
 build/%.o: src/%.S
-	$(MKDIR) -p $(dir $@)
-	$(CC) $< $(CFLAGS) -c -o $@
-
-build/vendor/%.o: $(STM_DIR)/%.c
-	$(MKDIR) -p $(dir $@)
-	$(CC) $< $(CFLAGS) -c -o $@
-
-build/vendor/%.o: $(STM_DIR)/%.s
 	$(MKDIR) -p $(dir $@)
 	$(CC) $< $(CFLAGS) -c -o $@
 
