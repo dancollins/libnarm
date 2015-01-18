@@ -57,21 +57,23 @@ CFLAGS += -fdata-sections -ffunction-sections
 CFLAGS += -include ../Projects/STM32F0xx_StdPeriph_Templates/stm32f0xx_conf.h
 CFLAGS += $(addprefix -I, $(INCLUDE))
 
-OBJS = $(addprefix objs/, $(STM32_SRC:.c=.o))
+OBJS = $(addprefix build/, $(STM32_SRC:.c=.o))
 
 .PHONY: all clean
 
 all: libstm32f0xx.a
 
-objs/%.o: %.c
-	$(MKDIR) -p $(dir $@)
-	$(CC) $< $(CFLAGS) -c -o $@
+build/%.o: %.c
+	@$(ECHO) "  CC  $(<)"
+	@$(MKDIR) -p $(dir $@)
+	@$(CC) $< $(CFLAGS) -c -o $@
 
 libstm32f0xx.a: $(OBJS)
-	$(AR) -r $@ $(OBJS)
+	@$(ECHO) "  AR  $(@)"
+	@$(AR) -r $@ $(OBJS)
 
 clean:
-	$(RM) -rf objs deps
+	$(RM) -rf build
 
 #
 # TOOLCHAIN
@@ -80,3 +82,4 @@ CC=arm-none-eabi-gcc
 AR=arm-none-eabi-ar
 MKDIR=mkdir
 RM=rm
+ECHO=echo

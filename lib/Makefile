@@ -64,18 +64,21 @@ OBJS = \
 #
 .PHONY: all clean
 
-all: clean $(PROJECT).a
+all: $(PROJECT).a
 
 build/%.o: %.c
-	$(MKDIR) -p $(dir $@)
-	$(CC) $< $(CFLAGS) -c -o $@
+	@$(ECHO) "  CC  $(<)"
+	@$(MKDIR) -p $(dir $@)
+	@$(CC) $< $(CFLAGS) -c -o $@
 
 build/%.o: %.S
-	$(MKDIR) -p $(dir $@)
-	$(CC) $< $(CFLAGS) -c -o $@
+	@$(ECHO) "  CC  $(<)"
+	@$(MKDIR) -p $(dir $@)
+	@$(CC) $< $(CFLAGS) -c -o $@
 
 $(PROJECT).a: $(OBJS)
-	$(AR) -r $@ $^
+	@$(ECHO) "  AR  $(@)"
+	@$(AR) -r $@ $^
 
 clean:
 	rm -rf build
@@ -91,4 +94,5 @@ OBJCOPY=arm-none-eabi-objcopy
 OBJDUMP=arm-none-eabi-objdump
 SIZE=arm-none-eabi-size
 MKDIR=mkdir
+ECHO=echo
 

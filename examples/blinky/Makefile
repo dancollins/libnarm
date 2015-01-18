@@ -78,23 +78,26 @@ OBJS = \
 #
 .PHONY: all clean
 
-all: clean output/$(PROJECT).elf
+all: output/$(PROJECT).elf
 
 build/%.o: src/%.c
-	$(MKDIR) -p $(dir $@)
-	$(CC) $< $(CFLAGS) -c -o $@
+	@$(ECHO) "  CC  $(<)"
+	@$(MKDIR) -p $(dir $@)
+	@$(CC) $< $(CFLAGS) -c -o $@
 
 build/%.o: src/%.S
-	$(MKDIR) -p $(dir $@)
-	$(CC) $< $(CFLAGS) -c -o $@
+	@$(ECHO) "  CC  $(<)"
+	@$(MKDIR) -p $(dir $@)
+	@$(CC) $< $(CFLAGS) -c -o $@
 
 output/$(PROJECT).elf: $(OBJS)
-	$(MKDIR) -p output
-	$(CC) $^ $(CFLAGS) $(LFLAGS) -o $@
-	$(OBJCOPY) -O binary output/$(PROJECT).elf output/$(PROJECT).bin
-	$(OBJCOPY) -O ihex output/$(PROJECT).elf output/$(PROJECT).hex
-	$(OBJDUMP) -St -marm output/$(PROJECT).elf > output/$(PROJECT).lst
-	$(SIZE) output/$(PROJECT).elf
+	@$(ECHO) "  CC  $(@)"
+	@$(MKDIR) -p output
+	@$(CC) $^ $(CFLAGS) $(LFLAGS) -o $@
+	@$(OBJCOPY) -O binary output/$(PROJECT).elf output/$(PROJECT).bin
+	@$(OBJCOPY) -O ihex output/$(PROJECT).elf output/$(PROJECT).hex
+	@$(OBJDUMP) -St -marm output/$(PROJECT).elf > output/$(PROJECT).lst
+	@$(SIZE) output/$(PROJECT).elf
 
 clean:
 	rm -rf build
@@ -109,4 +112,5 @@ OBJCOPY=arm-none-eabi-objcopy
 OBJDUMP=arm-none-eabi-objdump
 SIZE=arm-none-eabi-size
 MKDIR=mkdir
+ECHO=echo
 
