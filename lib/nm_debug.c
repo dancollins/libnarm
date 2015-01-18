@@ -84,7 +84,6 @@ uint8_t nm_debug_write(char *ptr, uint8_t len) {
 
 void USART2_IRQHandler(void) {
   if (USART_GetITStatus(USART2, USART_IT_TXE) == SET) {
-	GPIO_WriteBit(GPIOA, GPIO_Pin_14, Bit_SET);
 	/* Check to see if we're done */
 	if (debug_tail == debug_head) {
 	  USART_ITConfig(USART2, USART_IT_TXE, DISABLE);
