@@ -13,10 +13,14 @@
  *   limitations under the License.
  */
 #include <unistd.h>
+#include <errno.h>
 
 #include "stm32f0xx.h"
 
 #include "libnarm.h"
+
+#undef errno
+extern int errno;
 
 int _write(int fd, char *ptr, int len) {
   int ret;
@@ -47,6 +51,7 @@ int _write(int fd, char *ptr, int len) {
 	break;
 
   default:
+	errno = EBADF;
 	ret = -1;
 	break;
   }
