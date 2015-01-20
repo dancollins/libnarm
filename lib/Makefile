@@ -89,7 +89,7 @@ clean:
 # TOOLCHAIN
 #
 CC=arm-none-eabi-gcc
-AR=arm-none-eabi-ar
+AR=arm-none-eabi-gcc-ar
 OBJCOPY=arm-none-eabi-objcopy
 OBJDUMP=arm-none-eabi-objdump
 SIZE=arm-none-eabi-size
