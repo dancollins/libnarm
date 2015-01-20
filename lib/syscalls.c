@@ -12,6 +12,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
+#include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
 
@@ -21,6 +22,30 @@
 
 #undef errno
 extern int errno;
+
+caddr_t _sbrk(int incr) {
+  /* Linker values */
+  extern char end;
+  extern char stack_end;
+
+  static char *heap_ptr = NULL;
+  char *prev_heap_ptr;
+
+  if (heap_ptr == NULL)
+	heap_ptr = &end;
+
+  prev_heap_ptr = heap_ptr;
+
+  /* Ensure we're not overflowing our heap */
+  if (heap_ptr + incr > &stack_end) {
+	errno = ENOMEM;
+	return (caddr_t) -1;
+  }
+
+  /* Increate the heap size */
+  heap_ptr += incr;
+  return (caddr_t)prev_heap_ptr;
+}
 
 int _write(int fd, char *ptr, int len) {
   int ret;
@@ -39,11 +64,7 @@ int _write(int fd, char *ptr, int len) {
 	 * interrupt which will let stdout continue */
 	USART_ITConfig(USART2, USART_IT_TXE, DISABLE);
 
-	for (int i = 0; i < len; i++) {
-	  while (USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET)
-		;
-	  USART_SendData(USART2, ptr[i]);
-	}
+	nm_debug_write_blocking(ptr, len);
 
 	USART_ITConfig(USART2, USART_IT_TXE, ENABLE);
 
