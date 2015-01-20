@@ -20,6 +20,7 @@ all:
 	$(MAKE) -C examples/blinky
 	$(MAKE) -C examples/malloc
 	$(MAKE) -C examples/uart
+	$(MAKE) -C examples/dss
 
 clean:
 	$(MAKE) -C lib clean
@@ -27,7 +28,7 @@ clean:
 	$(MAKE) -C examples/blinky clean
 	$(MAKE) -C examples/malloc clean
 	$(MAKE) -C examples/uart clean
-
+	$(MAKE) -C examples/dss clean
 #
 # Toolchain
 #

@@ -18,5 +18,6 @@
 /* Include the library headers */
 #include "nm_debug.h"
 #include "nm_systick.h"
+#include "nm_dev_ad9850.h"
 
 #endif /* _LIBNARM_H */
