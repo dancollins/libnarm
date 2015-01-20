@@ -64,7 +64,9 @@ int _write(int fd, char *ptr, int len) {
 	 * interrupt which will let stdout continue */
 	USART_ITConfig(USART2, USART_IT_TXE, DISABLE);
 
+	nm_debug_write_blocking(KRED, sizeof(KRED));
 	nm_debug_write_blocking(ptr, len);
+	nm_debug_write_blocking(KNRM, sizeof(KNRM));
 
 	USART_ITConfig(USART2, USART_IT_TXE, ENABLE);
 

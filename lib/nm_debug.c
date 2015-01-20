@@ -80,6 +80,14 @@ uint8_t nm_debug_write(char *ptr, uint8_t len) {
   return i;
 }
 
+void nm_debug_write_blocking(char *ptr, uint8_t len) {
+  for (int i = 0; i < len; i++) {
+	while (USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET)
+	  ;
+	USART_SendData(USART2, ptr[i]);
+  }
+}
+
 void USART2_IRQHandler(void) {
   if (USART_GetITStatus(USART2, USART_IT_TXE) == SET) {
 	/* Check to see if we're done */

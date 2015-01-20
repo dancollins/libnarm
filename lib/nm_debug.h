@@ -17,6 +17,16 @@
 
 #include <stdint.h>
 
+/* These let you display different colours in a terminal! */
+#define KNRM  "\x1B[0m"
+#define KRED  "\x1B[31m"
+#define KGRN  "\x1B[32m"
+#define KYEL  "\x1B[33m"
+#define KBLU  "\x1B[34m"
+#define KMAG  "\x1B[35m"
+#define KCYN  "\x1B[36m"
+#define KWHT  "\x1B[37m"
+
 /**
  * Prepares the debug library for use.
  * This must be called before any other calls to the debug library. Multiple
@@ -32,5 +42,14 @@ extern void nm_debug_init(void);
  * @returns number of bytes added to the buffer
  */
 extern uint8_t nm_debug_write(char *ptr, uint8_t len);
+
+/**
+ * Send debug strings to the USART port in a blocking fashion
+ *
+ * @param ptr pointer to the buffer containing data to send
+ * @param len number of bytes to send
+ * @returns number of bytes added to the buffer
+ */
+extern void nm_debug_write_blocking(char *ptr, uint8_t len);
 
 #endif /* _NM_DEBUG_H */
