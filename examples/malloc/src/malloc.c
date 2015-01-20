@@ -37,17 +37,12 @@ int main(void) {
 
   GPIO_WriteBit(GPIOA, GPIO_Pin_14 | GPIO_Pin_15, Bit_RESET);
 
-  printf("malloc test\n");
-  printf("malloc test\n");
-  printf("malloc test\n");
-  printf("malloc test\n");
-  printf("malloc test\n");
-
   while(1) {
 	/* Allocate a block */
 	dynamic_buffer = (char *)malloc(1024);
 	if (dynamic_buffer == NULL) {
-	  fprintf(stderr, "Failed to allocate dynamic memory!");
+	  fprintf(stderr, "Failed to allocate dynamic memory!\n");
+	  GPIO_WriteBit(GPIOA, GPIO_Pin_14 | GPIO_Pin_15, Bit_SET);
 	  while(1)
 		;
 	}

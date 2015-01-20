@@ -20,8 +20,11 @@ ENTRY(Reset_Handler)
 _estack = 0x20001FFF;
 
 /* This will create a linker error if the heap and stack wont fit in RAM */
-_Min_Heap_Size = 2048;      /* required amount of heap  */
-_Min_Stack_Size = 1024; /* required amount of stack */
+_Min_Heap_Size = 4096; /* required amount of heap  */
+_Min_Stack_Size = 256; /* required amount of stack */
+
+/* Give us a pointer to where we expect the end of the stack to be */
+stack_end = _estack - _Min_Stack_Size;
 
 /* Specify the address for flash and RAM */
 MEMORY
