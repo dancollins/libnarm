@@ -13,24 +13,27 @@
 #   limitations under the License.
 
 # Project Name
-PROJECT = libnarm
+PROJECT = wifi
 
 # Add project sources
 SRCS_C = \
-	nm_debug.c \
-	nm_systick.c \
-	syscalls.c	\
-	nm_dev_ad9850.c \
-	nm_fifo.c \
-	nm_dev_esp8266.c
-	
+	wifi.c \
+	system_stm32f0xx.c
+
+SRCS_H =
+
+SRCS_S = \
+	startup_stm32f051.S
+
+# Add project include directories here
+INCLUDE = src
 
 #
 # VENDOR
 #
-# Include the STM headers
+# Include the STM code
 STM_DIR = \
-	../vendor
+	../../vendor
 
 STM_INCLUDE = \
 	STM32F0xx_StdPeriph_Lib_V1.3.1/Libraries/STM32F0xx_StdPeriph_Driver/inc \
@@ -41,7 +44,6 @@ STM_DEFS = \
 	-DUSE_STDPERIPH_DRIVER \
 	-DSTM32F051
 
-
 #
 # COMPILER FLAGS
 #
@@ -50,13 +52,20 @@ ARCH_FLAGS=-mthumb -mcpu=cortex-m0 -mfloat-abi=soft
 GC=-Wl,--gc-sections
 MAP=-Wl,-Map=$(PROJECT).map
 
-CFLAGS=$(ARCH_FLAGS) $(STM_DEFS)
-CFLAGS+=-Wall -Werror -g -std=gnu99
-CFLAGS+=-Os -flto -ffunction-sections -fdata-sections
-CFLAGS+=-fno-builtin
+CFLAGS += $(ARCH_FLAGS) $(STM_DEFS)
+CFLAGS += -Wall -Werror -g -std=gnu99
+CFLAGS += -Os -flto -ffunction-sections -fdata-sections
+CFLAGS += -fno-builtin
 
-CFLAGS += -I.
+CFLAGS += $(addprefix -I, $(INCLUDE))
+CFLAGS += $(addprefix -I, ../../lib)
 CFLAGS += $(addprefix -I$(STM_DIR)/, $(STM_INCLUDE))
+
+LFLAGS += -Lsrc -L../../lib
+LFLAGS += -L../../vendor/STM32F0xx_StdPeriph_Lib_V1.3.1/Libraries
+LFLAGS += -Tstm32f051k8_flash.ld
+LFLAGS += --specs=nano.specs -lc -lnarm -lstm32f0xx -lnosys
+LFLAGS += $(GC) $(MAP)
 
 OBJS = \
 	$(addprefix build/, $(SRCS_C:.c=.o)) \
@@ -68,32 +77,36 @@ OBJS = \
 #
 .PHONY: all clean
 
-all: $(PROJECT).a
+all: output/$(PROJECT).elf
 
-build/%.o: %.c
+build/%.o: src/%.c
 	@$(ECHO) "  CC  $(<)"
 	@$(MKDIR) -p $(dir $@)
 	@$(CC) $< $(CFLAGS) -c -o $@
 
-build/%.o: %.S
+build/%.o: src/%.S
 	@$(ECHO) "  CC  $(<)"
 	@$(MKDIR) -p $(dir $@)
 	@$(CC) $< $(CFLAGS) -c -o $@
 
-$(PROJECT).a: $(OBJS)
-	@$(ECHO) "  AR  $(@)"
-	@$(AR) -r $@ $^
+output/$(PROJECT).elf: $(OBJS)
+	@$(ECHO) "  CC  $(@)"
+	@$(MKDIR) -p output
+	@$(CC) $^ $(CFLAGS) $(LFLAGS) -o $@
+	@$(OBJCOPY) -O binary output/$(PROJECT).elf output/$(PROJECT).bin
+	@$(OBJCOPY) -O ihex output/$(PROJECT).elf output/$(PROJECT).hex
+	@$(OBJDUMP) -St -marm output/$(PROJECT).elf > output/$(PROJECT).lst
+	@$(SIZE) output/$(PROJECT).elf
 
 clean:
 	rm -rf build
-	rm -rf $(PROJECT).a
+	rm -rf output
 
 
 #
 # TOOLCHAIN
 #
 CC=arm-none-eabi-gcc
-AR=arm-none-eabi-gcc-ar
 OBJCOPY=arm-none-eabi-objcopy
 OBJDUMP=arm-none-eabi-objdump
 SIZE=arm-none-eabi-size

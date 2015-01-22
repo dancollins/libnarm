@@ -21,6 +21,7 @@ all:
 	$(MAKE) -C examples/malloc
 	$(MAKE) -C examples/uart
 	$(MAKE) -C examples/dss
+	$(MAKE) -C examples/wifi
 
 clean:
 	$(MAKE) -C lib clean
@@ -29,6 +30,7 @@ clean:
 	$(MAKE) -C examples/malloc clean
 	$(MAKE) -C examples/uart clean
 	$(MAKE) -C examples/dss clean
+	$(MAKE) -C examples/wifi clean
 #
 # Toolchain
 #

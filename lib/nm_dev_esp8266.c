@@ -12,14 +12,17 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-#ifndef _LIBNARM_H
-#define _LIBNARM_H
 
-/* Include the library headers */
-#include "nm_debug.h"
-#include "nm_systick.h"
-#include "nm_fifo.h"
-#include "nm_dev_ad9850.h"
 #include "nm_dev_esp8266.h"
 
-#endif /* _LIBNARM_H */
+//TODO: setup UART
+int8_t nm_dev_esp8266_init(nm_dev_esp8266_t* dev){
+  if(dev){
+    nm_fifo_init(&dev->tx_fifo, dev->tx_buf, sizeof(dev->tx_buf));
+    nm_fifo_init(&dev->rx_fifo, dev->rx_buf, sizeof(dev->rx_buf));
+
+
+    return 0;
+  }
+  return -1;
+}

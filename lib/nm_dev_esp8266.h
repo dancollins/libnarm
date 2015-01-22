@@ -12,14 +12,17 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-#ifndef _LIBNARM_H
-#define _LIBNARM_H
+#ifndef _NM_DEV_ESP8266_H
+#define _NM_DEV_ESP8266_H
 
-/* Include the library headers */
-#include "nm_debug.h"
-#include "nm_systick.h"
+#include <stdint.h>
 #include "nm_fifo.h"
-#include "nm_dev_ad9850.h"
-#include "nm_dev_esp8266.h"
 
-#endif /* _LIBNARM_H */
+typedef struct{
+  uint8_t tx_buf[64];
+  uint8_t rx_buf[64];
+  nm_fifo_t tx_fifo;
+  nm_fifo_t rx_fifo;
+}nm_dev_esp8266_t;
+
+#endif /* _NM_DEV_ESP8266_H */
